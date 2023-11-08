@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getLatestPosts } from "../../service/ApiService";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
 const ParentWrapper = styled.div`
   display: flex;
@@ -26,11 +28,18 @@ const PostsContainer = styled.div`
     justify-content: space-between;
     border-bottom: 1px solid #ececec;
     padding-bottom: 1rem;
+    &:last-child {
+      border-bottom: none;
+    }
     .title {
-      margin-left: 1rem; // 왼쪽에 마진을 주려면 margin-right를 사용합니다.
+      margin-left: 1rem;
+      cursor: pointer;
+      &:hover {
+        font-weight: bold;
+      }
     }
     .nickname {
-      margin-right: 1rem; // 오른쪽에 마진을 주려면 margin-left를 사용합니다.
+      margin-right: 1rem;
     }
   }
   @media screen and (max-width: 768px) {
@@ -39,6 +48,8 @@ const PostsContainer = styled.div`
 `;
 
 const PostContainer = () => {
+  const navigate = useNavigate();
+  const { isLogin } = useContext(UserContext);
   const [freeBoardResponse, setFreeBoardResponse] = useState([]);
   const [qnaBoardResponse, setQnaBoardResponse] = useState([]);
   const [noticeBoardResponse, setNoticeBoardResponse] = useState([]);
@@ -72,9 +83,10 @@ const PostContainer = () => {
         {noticeBoardResponse.length > 0 ? (
           noticeBoardResponse.map((post) => (
             <div className="map_container" key={post.id}>
-              <div className="title">{post.title}</div>
+              <div className="title" onClick={() => {navigate(`/post/${post.id}`);}}>
+                {post.title}
+              </div>
               <div className="nickname">{post.nickname}</div>
-              {/* <div className="content">{post.content}</div> */}
             </div>
           ))
         ) : (
@@ -86,7 +98,19 @@ const PostContainer = () => {
         {freeBoardResponse.length > 0 ? (
           freeBoardResponse.map((post) => (
             <div className="map_container" key={post.id}>
-              <p className="title">{post.title}</p>
+              <div
+                className="title"
+                onClick={() => {
+                  if (isLogin) {
+                    navigate(`/post/${post.id}`);
+                  } else {
+                    alert("로그인후에 게시글 열람이 가능합니다.");
+                    navigate("/signin");
+                  }
+                }}
+              >
+                {post.title}
+              </div>
               <p className="nickname">{post.nickname}</p>
             </div>
           ))
@@ -99,7 +123,19 @@ const PostContainer = () => {
         {qnaBoardResponse.length > 0 ? (
           qnaBoardResponse.map((post) => (
             <div className="map_container" key={post.id}>
-              <p className="title">{post.title}</p>
+              <div
+                className="title"
+                onClick={() => {
+                  if (isLogin) {
+                    navigate(`/post/${post.id}`);
+                  } else {
+                    alert("로그인후에 게시글 열람이 가능합니다.");
+                    navigate("/signin");
+                  }
+                }}
+              >
+                {post.title}
+              </div>
               <p className="nickname">{post.nickname}</p>
             </div>
           ))
