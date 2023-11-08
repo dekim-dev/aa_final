@@ -82,7 +82,7 @@ const WebBoardTable = ({
           <tbody>
             {postList.map((post) => (
               <tr key={post.id}>
-                {blockedUsers.includes(post.userId.toString()) ? (
+                {blockedUsers && blockedUsers.includes(post.userId.toString()) ? (
                   <>
                     {/* 차단한 회원일 경우 */}
                     <td></td>
@@ -111,9 +111,9 @@ const WebBoardTable = ({
                       )}
                     </td>
                     <td className="title">
-                    {topics[post.topic]
-                      ? `[${topics[post.topic]}]  `
-                      : `[공지]  `}
+                      {topics[post.topic]
+                        ? `[${topics[post.topic]}]  `
+                        : `[공지]  `}
                       <Link to={`/post/${post.id}`}>{post.title}</Link>
                     </td>
                     <td className="nickname">{post.nickname}</td>
@@ -192,7 +192,7 @@ const MobileBoardTable = ({
     <MobileWrapper>
       <div className="col">
         {postList.map((post) => {
-          if (blockedUsers.includes(post.userId.toString())) {
+          if (blockedUsers && blockedUsers.includes(post.userId.toString())) {
             return (
               <div className="blocked_user_wrapper" key={post.id}>
                 <p className="title" style={{ color: "gray" }}>
@@ -203,14 +203,14 @@ const MobileBoardTable = ({
             );
           } else {
             return (
-              <Link
-                className="map_container"
-                to={`/post/${post.id}`}
-                key={post.id}
-              >
+              <Link className="map_container" to={`/post/${post.id}`} key={post.id}>
                 <div>
                   <p className="title">
-                    [{topics[post.topic]}] {post.title}
+                    {topics[post.topic]
+                      ? `[${topics[post.topic]}]  `
+                      : `[공지]  `
+                    }
+                    {post.title}
                   </p>
                   <div className="row">
                     {showCheckbox && (

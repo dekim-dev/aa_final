@@ -10,6 +10,8 @@ import {
 import {
   getPopularPosts,
   getPostsByBoardCategory,
+  noticePost,
+  noticePostList,
   searchByKeyword,
 } from "../service/ApiService";
 import { useLocation } from "react-router-dom";
@@ -76,6 +78,8 @@ const BoardPage = ({ boardName }) => {
     } else if (searchResults) {
       setPostList(searchResults.content);
       setTotalResults(searchResults.totalElements);
+    } else if (boardName === "notice") {
+      getNoticeList();
     } else {
       getPostListByBoardCategory();
     }
@@ -89,6 +93,17 @@ const BoardPage = ({ boardName }) => {
       console.log(response);
     } catch (error) {
       console.error("베스트 게시글 가져오기 에러:", error);
+    }
+  };
+
+  const getNoticeList = async () => {
+    try {
+      const response = await noticePostList();
+      setPostList(response.content);
+      setTotalResults(response.totalElements);
+      console.log(response);
+    } catch (error) {
+      console.error("공지사항 가져오기 에러:", error);
     }
   };
 

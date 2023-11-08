@@ -6,11 +6,11 @@ import { dateFormatWithDash } from "../utils/Functions";
 export const call = async (api, method, request) => {
   let token = localStorage.getItem("ACCESS_TOKEN");
 
-  if (!token) {
-    // 토큰이 없을 경우 로그인 필요
-    alert("로그인이 필요합니다.");
-    throw new Error("로그인이 필요합니다.");
-  }
+//  if (!token) {
+//    // 토큰이 없을 경우 로그인 필요
+//    alert("로그인이 필요합니다.");
+//    throw new Error("로그인이 필요합니다.");
+//  }
 
   const config = {
     method: method,
@@ -842,3 +842,24 @@ export const getLatestPosts = async (boardCategory) => {
     return error;
   }
 };
+
+// 공지사항 게시글 (토큰 필요 X)
+export const noticePost = async (postId) => {
+  try {
+    const response = await axios.get(`/main/notice/${postId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// 공지사항 게시글리스트 (토큰 필요 X)
+export const noticePostList = async () => {
+  try {
+    const response = await axios.get(`/main/board/notice`);
+  return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+

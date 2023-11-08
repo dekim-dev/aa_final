@@ -113,7 +113,7 @@ export const topics = {
   etc: "기타",
 };
 
-const PostViewer = ({ postData, canEdit, postId }) => {
+const PostViewer = ({ postData, canEdit, postId, isLogin }) => {
   const navigate = useNavigate();
   const { post } = usePostStore();
   const isMobile = useWindowResize();
@@ -203,14 +203,13 @@ const PostViewer = ({ postData, canEdit, postId }) => {
             className="content"
             dangerouslySetInnerHTML={{ __html: postData.content }}
           />
-
-          {!canEdit && (
+          {isLogin && !canEdit && postData.boardCategory !== "notice" && (
             <div className="edit_delete_wrapper">
               <button onClick={handleReportPost}>게시글 신고</button>
               <button onClick={handleClickLikes}>👍🏻</button>
             </div>
           )}
-          {canEdit && (
+          {isLogin && canEdit && (
             <div className="edit_delete_wrapper">
               <Link to={`/post/edit/${postId}`}>
                 <MyButton text="수정" />

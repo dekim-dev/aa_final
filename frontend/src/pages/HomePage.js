@@ -55,10 +55,19 @@ const ParentWrapper = styled.div`
 `;
 
 const HomePage = () => {
-  const { isLogin, isPaidMember, userNickname } = useContext(UserContext);
+  const { setIsLogin, isLogin, isPaidMember, userNickname } = useContext(UserContext);
 
   const [dailyTodoItems, setDailyTodoItems] = useState([]); // 상태 추가
+  console.log("메인 isLogin: ", isLogin)
+  console.log("메인 isPaidMember: ", isPaidMember)
+  console.log("메인 userNickname: ", userNickname)
+
+  const token = localStorage.getItem("ACCESS_TOKEN");
+
   useEffect(() => {
+  if (!token) {
+    setIsLogin(false)
+  }
     async function fetchTodaysItems() {
       try {
         const response = await getTodoItemsByDate(new Date());

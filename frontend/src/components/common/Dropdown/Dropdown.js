@@ -59,11 +59,8 @@ const DropDown = () => {
         setIsPaidMember(response.isPaidMember);
         setUserNickname(response.nickname);
         setBlockedUsers(response.blockedUserIds);
-
-        setIsLogin(true);
-        console.log(response);
       } catch (error) {
-        console.log(error);
+        console.log("드롭다운 에러: ", error);
       }
     };
     getUserInformation();

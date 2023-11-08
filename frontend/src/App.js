@@ -18,6 +18,8 @@ import Ad from "./components/common/Ad";
 import MembershipPage from "./pages/MembershipPage";
 import KakaoCallback from "./components/KakaoPay/KakaoCallBack";
 import FindPwdPage from "./pages/FindPwdPage";
+import UserRoute from "./utils/UserRoute";
+import AdminRoute from "./utils/AdminRoute";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -48,22 +50,19 @@ function App() {
           <Route path="/signin" element={<LoginPage />} />
           <Route path="/signup" element={<JoinPage />} />
           <Route path="/findpwd" element={<FindPwdPage />} />
-          <Route path="/post" element={<PostWritePage />} />
+          <Route path="/board/notice" element={<BoardPage boardName="notice" />} />
           <Route path="/post/:postId" element={<PostPage />} />
-          <Route path="/post/edit/:postId" element={<PostEditPage />} />
-          <Route path="/board/free" element={<BoardPage boardName="free" />} />
-          <Route path="/board/qna" element={<BoardPage boardName="qna" />} />
-          <Route path="/board/best" element={<BoardPage boardName="best" />} />
-          <Route
-            path="/board/notice"
-            element={<BoardPage boardName="notice" />}
-          />
-          <Route path="/clinic/list" element={<ClinicListPage />} />
-          <Route path="/clinic/:clinicId" element={<ClinicDetailPage />} />
-          <Route path="/mypage/*" element={<MyPage />} />
-          <Route path="/membership/*" element={<MembershipPage />} />
+          <Route path="/post" element={<UserRoute><PostWritePage /></UserRoute>} />
+          <Route path="/post/edit/:postId" element={<UserRoute><PostEditPage /></UserRoute>} />
+          <Route path="/board/free" element={<UserRoute><BoardPage boardName="free" /></UserRoute>} />
+          <Route path="/board/qna" element={<UserRoute><BoardPage boardName="qna" /></UserRoute>} />
+          <Route path="/board/best" element={<UserRoute><BoardPage boardName="best" /></UserRoute>} />
+          <Route path="/clinic/list" element={<UserRoute><ClinicListPage /></UserRoute>} />
+          <Route path="/clinic/:clinicId" element={<UserRoute><ClinicDetailPage /></UserRoute>} />
+          <Route path="/mypage/*" element={<UserRoute><MyPage /></UserRoute>} />
+          <Route path="/membership/*" element={<UserRoute><MembershipPage /></UserRoute>} />
           <Route path="/kakao/auth/callback" element={<KakaoCallback />} />
-          <Route path="/admin/*" element={<AdminPage />} />
+          <Route path="/admin/*" element={<AdminRoute><AdminPage /></AdminRoute>} />
         </Routes>
         <Ad />
       </Router>
