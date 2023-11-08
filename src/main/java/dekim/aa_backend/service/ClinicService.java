@@ -31,6 +31,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -50,8 +51,8 @@ public class ClinicService {
   private JsonNode fetchClinicDataFromPublicApi() throws IOException {
     // 요청을 위한 URL 생성
     String urlBuilder = "http://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire" + "?" + "serviceKey=" + serviceKey +
-            "&" + URLEncoder.encode("QD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("D004", StandardCharsets.UTF_8) +
-            "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("100", StandardCharsets.UTF_8);
+            "&" + URLEncoder.encode("QN", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("정신", StandardCharsets.UTF_8) +
+            "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("2000", StandardCharsets.UTF_8);
     URL url = new URL(urlBuilder);
 
     // URL 연결헤서 데이터 가져오기
@@ -95,8 +96,12 @@ public class ClinicService {
                     ? clinicJson.get("dutyInf").asText()
                     : "-")
             .tel(clinicJson.get("dutyTel1").asText())
-            .latitude(clinicJson.get("wgs84Lat").asDouble())
-            .longitude(clinicJson.get("wgs84Lon").asDouble())
+            .latitude(clinicJson.has("wgs84Lat") && !clinicJson.get("wgs84Lat").isNull()
+                    ? clinicJson.get("wgs84Lat").asDouble()
+                    : 0.0)
+            .longitude(clinicJson.has("wgs84Lon") && !clinicJson.get("wgs84Lon").isNull()
+                    ? clinicJson.get("wgs84Lon").asDouble()
+                    : 0.0)
             .build();
 
 
@@ -170,7 +175,7 @@ public class ClinicService {
   public Page<ClinicDTO> fetchClinicList(int page, int pageSize) {
     PageRequest pageRequest = PageRequest.of(page, pageSize);
     Page<Clinic> clinicPage = clinicRepository.findAll(pageRequest);
-    log.info("🎈clinicPage : " + clinicPage.get().toList().stream().toList());
+    log.info("🎈clinicPage : " + clinicPage.get().collect(Collectors.toList()));
     return clinicPage.map(this::convertToClinicDTO);
   }
 
@@ -187,7 +192,7 @@ public class ClinicService {
                       .updatedAt(comment.getUpdatedAt())
                       .userId(comment.getUser().getId())
                       .build())
-              .toList();
+              .collect(Collectors.toList());
     } else {
       commentDTOList = Collections.emptyList();  // 댓글이 없을경우 emptyList 로 성정
     }

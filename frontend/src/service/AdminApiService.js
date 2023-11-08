@@ -74,6 +74,29 @@ export const deleteMultipleClinics = async (clinicIds) => {
   }
 };
 
+// ❗️❗️❗️db담당자용
+export const getClinicInfoFromApi = async () => {
+  try {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    const response = await call(`/admin/clinic/db_manager`, "GET", token);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+// 관리자용 병원리스트 업데이트
+export const getClinicInfoFromApiForAdmin = async () => {
+  try {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    const response = await call(`/admin/clinic/update`, "GET", token);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+
 // ✨ 광고 관리
 
 export const allAds = async (page, pageSize) => {

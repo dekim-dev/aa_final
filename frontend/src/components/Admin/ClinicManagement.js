@@ -4,6 +4,7 @@ import { deleteMultipleClinics } from "../../service/AdminApiService";
 import { getClinicList } from "../../service/ApiService";
 import ClinicPopUp from "./ClinicPopUp";
 import Pagination from "../common/Pagination";
+import ClinicUpdateBtn from "./ClinicUpdateBtn";
 
 const ParentContainer = styled.div`
   width: 80%;
@@ -185,6 +186,9 @@ const ClinicManagement = () => {
           <button onClick={handleAddPopUpOpen}>병원 등록</button>
           <button onClick={handleDeleteBtn}>병원 삭제</button>
         </div>
+         <div className="button_container">
+           <ClinicUpdateBtn />
+         </div>
       </ParentContainer>
       {isPopupOpen && (
         <ClinicPopUp
