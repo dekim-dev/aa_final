@@ -5,7 +5,8 @@ const ParentWrapper = styled.div`
   button {
     width: 2rem;
     height: 2rem;
-    padding: 0.4rem;
+    padding: 0.2rem;
+    margin: 0.2rem;
     border: none;
     background-color: transparent;
     border-radius: 50%;
@@ -45,7 +46,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const getPageNumbers = () => {
     const pageNumbers = [];   // 배열로 모든 페이지 숫자 받기
     const pagesPerGroup = 5;  // 한번에 보여줄 페이지 숫자 개수
-
     const currentGroup = Math.ceil(currentPage / pagesPerGroup);  // 5단위로 페이지 넘버를 보여주기 위한 그룹
     const startPage = (currentGroup - 1) * pagesPerGroup + 1;     // ex) (3-1) * 5 + 1 = 11
     const endPage = Math.min(totalPages, currentGroup * pagesPerGroup); // 전체 페이지 숫자보다 더 큰 숫자가 나오지 않도록 TotalPages와 비교
