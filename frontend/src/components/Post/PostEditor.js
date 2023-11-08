@@ -68,7 +68,7 @@ const PostEditor = ({ isEdit, originalData }) => {
   const [selectedBoard, setSelectedBoard] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
   const [editor, setEditor] = useState("글 내용을 입력하세요");
-  const { userId } = useContext(UserContext);
+  const { userId, authority } = useContext(UserContext);
 
   const [state, setState] = useState({
     title: "",
@@ -91,37 +91,41 @@ const PostEditor = ({ isEdit, originalData }) => {
   };
 
   const handleSubmit = async () => {
-    const requestData = {
-      boardCategory: selectedBoard,
-      topic: selectedTopic,
-      title: state.title,
-      content: editor,
-    };
-    if (isEdit) {
-      // 글 수정일 경우 id만 추가
-      requestData.id = originalData.post.id;
-    }
     try {
+      const requestData = {
+        boardCategory: authority === "ROLE_ADMIN" ? "notice" : selectedBoard,
+        topic: authority === "ROLE_ADMIN" ? "undefined" : selectedTopic,
+        title: state.title,
+        content: editor,
+      };
       if (isEdit) {
-        // 글 수정일 경우 updatePost 함수 호출
-        const response = await updatePost(requestData, originalData.post.id);
-        console.log("글 수정 성공: ", response);
+        requestData.id = originalData.post.id;
+      }
+      if (
+        requestData.boardCategory &&
+        requestData.topic &&
+        requestData.title &&
+        requestData.content
+      ) {
+        const response = isEdit
+          ? await updatePost(requestData, originalData.post.id)
+          : await createPost(requestData);
+
+        const action = isEdit ? "수정" : "등록";
+        console.log(`글 ${action} 성공:`, response);
         navigate(`/post/${response.id}`, { replace: true });
       } else {
-        // 글 등록일 경우 createPost 함수 호출
-        const response = await createPost(requestData);
-        console.log("글 등록 성공: ", response);
-        navigate(`/post/${response.id}`, { replace: true });
+        alert("모든 필드를 입력해주세요.");
       }
     } catch (error) {
-      console.error("글 작성 또는 수정 실패: ", error);
+      console.error(`글 작성 또는 수정 실패:`, error);
     }
   };
 
   useEffect(() => {
     // isEdit이 들어올때만 동작하는 useEffect
     if (isEdit && originalData) {
-      setSelectedBoard(originalData.post.boardCategory);
+      setSelectedBoard(authority === "ROLE_ADMIN" ? "notice" : originalData.post.boardCategory);
       setSelectedTopic(originalData.post.topic);
       setState({
         title: originalData.post.title,
@@ -129,7 +133,7 @@ const PostEditor = ({ isEdit, originalData }) => {
       });
       setEditor(originalData.post.content);
     }
-  }, [isEdit, originalData]);
+  }, [isEdit, originalData, authority]);
 
   return (
     <ParentWrapper>

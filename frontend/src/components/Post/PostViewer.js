@@ -156,7 +156,9 @@ const PostViewer = ({ postData, canEdit, postId }) => {
           </div>
           <div className="title">
             <p>
-              [{topics[postData.topic]}] {postData.title}
+              {topics[postData.topic]
+                ? `[${topics[postData.topic]}] ${postData.title}`
+                : `[공지] ${postData.title}`}
             </p>
           </div>
           {isMobile ? (

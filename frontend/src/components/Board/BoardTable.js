@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { posts } from "../../DummyData";
 import { Link } from "react-router-dom";
 import useWindowResize from "../../utils/useWindowResize";
 import { topics } from "../Post/PostViewer";
@@ -112,7 +111,9 @@ const WebBoardTable = ({
                       )}
                     </td>
                     <td className="title">
-                      {`[${topics[post.topic]}] `}
+                    {topics[post.topic]
+                      ? `[${topics[post.topic]}]  `
+                      : `[공지]  `}
                       <Link to={`/post/${post.id}`}>{post.title}</Link>
                     </td>
                     <td className="nickname">{post.nickname}</td>
@@ -178,42 +179,6 @@ const MobileWrapper = styled.div`
     display: none;
   }
 `;
-
-// const MobileBoardTable = ({
-//   postList,
-//   showCheckbox,
-//   selectedPostIds,
-//   onCheckboxChange,
-// }) => {
-//   return (
-//     <MobileWrapper>
-//       <div className="col">
-//         {postList.map((post) => (
-//           <Link className="map_container" to={`/post/${post.id}`} key={post.id}>
-//             <div>
-//               <p className="title">
-//                 [{topics[post.topic]}] {post.title}
-//               </p>
-//               <div className="row">
-//                 {showCheckbox && (
-//                   <input
-//                     type="checkbox"
-//                     checked={selectedPostIds.includes(post.id)}
-//                     onChange={() => onCheckboxChange(post.id)}
-//                   />
-//                 )}
-//                 <p className="nickname">{post.nickname}</p>
-//                 <p className="createdAt">{dateFormat(post.createdAt)}</p>
-//                 <p className="viewCount">조회 {post.viewCount}</p>
-//                 <p className="likes">{post.likesCount}</p>
-//               </div>
-//             </div>
-//           </Link>
-//         ))}
-//       </div>
-//     </MobileWrapper>
-//   );
-// };
 
 const MobileBoardTable = ({
   postList,
