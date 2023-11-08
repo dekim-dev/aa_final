@@ -8,6 +8,7 @@ import DailyTodoList from "../components/MyPage/TodoList/DailyList";
 import { getTodoItemsByDate } from "../service/ApiService";
 import Quote from "../components/Home/Quote";
 import PostContainer from "../components/Home/PostContainer";
+import { NoticeForPaidMember, NoticeForUnpaidMember,} from "../components/Home/MembershipNotice";
 
 const ParentWrapper = styled.div`
   display: flex;
@@ -54,8 +55,7 @@ const ParentWrapper = styled.div`
 `;
 
 const HomePage = () => {
-  const { isLogin } = useContext(UserContext);
-  console.log(isLogin);
+  const { isLogin, isPaidMember, userNickname } = useContext(UserContext);
 
   const [dailyTodoItems, setDailyTodoItems] = useState([]); // 상태 추가
   useEffect(() => {
@@ -79,14 +79,21 @@ const HomePage = () => {
           <Quote />
         </div>
         {isLogin ? (
-          <div className="login_wrapper">
-            <DailyTodoList
-              selectedDate={new Date()}
-              dailyTodoItems={dailyTodoItems}
-              width={"20rem"}
-              height={"18rem"}
-            />
-          </div>
+           <>
+              <div className="login_wrapper">
+                <DailyTodoList
+                  selectedDate={new Date()}
+                  dailyTodoItems={dailyTodoItems}
+                  width={"20rem"}
+                  height={"18rem"}
+                />
+                {isPaidMember === "PAID" ? (
+                  <NoticeForPaidMember nickname={userNickname} />
+                ) : (
+                  <NoticeForUnpaidMember />
+                )}
+              </div>
+           </>
         ) : (
           <div className="login_wrapper">
             <LoginForm />
@@ -94,8 +101,6 @@ const HomePage = () => {
         )}
       </div>
       <PostContainer />
-
-      {/* <ImgUploadButton /> */}
     </ParentWrapper>
   );
 };

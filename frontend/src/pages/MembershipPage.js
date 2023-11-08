@@ -3,16 +3,23 @@ import Success from "../components/KakaoPay/Success";
 import ReadyOrDes from "../components/KakaoPay/ReadyOrDes";
 import Fail from "../components/KakaoPay/Fail";
 import Cancel from "../components/KakaoPay/Cancel";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import PaidMember from "../components/KakaoPay/PaidMember";
 
 const MembershipPage = () => {
+  const { isPaidMember } = useContext(UserContext);
+
   return (
     <>
-      <h1>멤버십페이지</h1>
-      <br />
       <Routes>
-        <Route index path="/" element={<ReadyOrDes />} />
+        {isPaidMember === "PAID" ? (
+          <Route index path="/" element={<PaidMember />} />
+        ) : (
+          <Route index path="/" element={<ReadyOrDes />} />
+        )}
         <Route path="/success" element={<Success />} />
-        <Route path="cancel" element={<Cancel />} />
+        <Route path="/cancel" element={<Cancel />} />
         <Route path="/fail" element={<Fail />} />
       </Routes>
     </>
