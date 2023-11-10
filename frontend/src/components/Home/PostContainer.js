@@ -50,6 +50,7 @@ const PostsContainer = styled.div`
 const PostContainer = () => {
   const navigate = useNavigate();
   const { isLogin } = useContext(UserContext);
+  const token = localStorage.getItem("ACCESS_TOKEN");
   const [freeBoardResponse, setFreeBoardResponse] = useState([]);
   const [qnaBoardResponse, setQnaBoardResponse] = useState([]);
   const [noticeBoardResponse, setNoticeBoardResponse] = useState([]);
@@ -101,7 +102,7 @@ const PostContainer = () => {
               <div
                 className="title"
                 onClick={() => {
-                  if (isLogin) {
+                  if (token) {
                     navigate(`/post/${post.id}`);
                   } else {
                     alert("로그인후에 게시글 열람이 가능합니다.");
@@ -126,7 +127,7 @@ const PostContainer = () => {
               <div
                 className="title"
                 onClick={() => {
-                  if (isLogin) {
+                  if (token) {
                     navigate(`/post/${post.id}`);
                   } else {
                     alert("로그인후에 게시글 열람이 가능합니다.");

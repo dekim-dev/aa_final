@@ -34,6 +34,7 @@ const ProfileIcon = styled.img`
 `;
 const DropDown = () => {
   const [dropDownView, setDropDownView] = useState(false);
+  const token = localStorage.getItem("ACCESS_TOKEN");
 
   const {
     userPfImg,
@@ -53,12 +54,17 @@ const DropDown = () => {
       try {
         const response = await getUserInfo();
         console.log("👉🏻드롭다운: ", response);
-        setUserId(response.id);
-        setUserPfImg(response.pfImg);
-        setAuthority(response.authority);
-        setIsPaidMember(response.isPaidMember);
-        setUserNickname(response.nickname);
-        setBlockedUsers(response.blockedUserIds);
+        if(response === " No user information available") {
+            setIsLogin(false);
+        } else {
+            setUserId(response.id);
+            setUserPfImg(response.pfImg);
+            setAuthority(response.authority);
+            setIsPaidMember(response.isPaidMember);
+            setUserNickname(response.nickname);
+            setBlockedUsers(response.blockedUserIds);
+            setIsLogin(true)
+        }
       } catch (error) {
         console.log("드롭다운 에러: ", error);
       }
@@ -76,7 +82,7 @@ const DropDown = () => {
 
   return (
     <DropDownWrapper>
-      {!isLogin || authority === "ROLE_ADMIN" ? (
+      {!token || authority === "ROLE_ADMIN" ? (
         <ProfileIcon
           src={NonMember}
           alt="nonUserImg"

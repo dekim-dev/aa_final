@@ -65,9 +65,6 @@ const HomePage = () => {
   const token = localStorage.getItem("ACCESS_TOKEN");
 
   useEffect(() => {
-  if (!token) {
-    setIsLogin(false)
-  }
     async function fetchTodaysItems() {
       try {
         const response = await getTodoItemsByDate(new Date());
@@ -87,7 +84,7 @@ const HomePage = () => {
           <DateNotice />
           <Quote />
         </div>
-        {isLogin ? (
+        {token ? (
            <>
               <div className="login_wrapper">
                 <DailyTodoList

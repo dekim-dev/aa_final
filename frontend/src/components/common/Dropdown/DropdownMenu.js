@@ -59,6 +59,7 @@ const StyledLink = styled(Link)`
 const DropdownContent = ({ isLoggedIn, setDropDownView }) => {
   const { setUserPfImg, setUserId, setIsLogin, authority } =
     useContext(UserContext);
+  const token = localStorage.getItem("ACCESS_TOKEN");
 
   const handleLinkClick = () => {
     setDropDownView(false);
@@ -84,7 +85,7 @@ const DropdownContent = ({ isLoggedIn, setDropDownView }) => {
     }
   };
 
-  if (isLoggedIn) {
+  if (token) {
     return (
       <DropdownMenu>
         {authority === "ROLE_USER" ? (
