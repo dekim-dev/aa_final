@@ -32,13 +32,13 @@ public class MainController {
 
     @GetMapping("/userInfo")
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            if (userDetails == null) {
-                // 사용자 정보가 없는 경우 처리
+//        if (userDetails == null) {
+            // 사용자 정보가 없는 경우 처리
 //                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-                return ResponseEntity.status(HttpStatus.OK).body("No user information available");
-
-            }
+//            return ResponseEntity.status(HttpStatus.OK).body("No user information available");
+//        }
+        log.info("유저인포" + userDetails + userDetails.getUsername());
+        try {
             UserInfoDTO userInfo = mainService.getUserInfo(Long.valueOf(userDetails.getUsername()));
             return new ResponseEntity<>(userInfo, HttpStatus.OK);
         } catch (Exception e) {

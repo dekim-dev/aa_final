@@ -4,9 +4,9 @@ import { UserContext } from "../context/UserContext";
 
 const UserRoute = ({ children }) => {
   const location = useLocation();
-  const { isLogin } = useContext(UserContext);
+  const token = localStorage.getItem("ACCESS_TOKEN");
 
-  return isLogin ? (
+  return token ? (
     children
   ) : (
     <>

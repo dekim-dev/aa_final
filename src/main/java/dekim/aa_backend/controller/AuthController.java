@@ -38,8 +38,12 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDTO> reissue(@RequestBody TokenRequestDTO tokenRequestDTO) {
-        return ResponseEntity.ok(authService.reissue(tokenRequestDTO));
+    public ResponseEntity<?> reissue(@RequestBody TokenRequestDTO tokenRequestDTO) {
+        try {
+            return ResponseEntity.ok(authService.reissue(tokenRequestDTO));
+        } catch(EntityNotFoundException e) {
+            return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/logout")
@@ -48,10 +52,13 @@ public class AuthController {
         log.info("🔑로그아웃용 refreshToken : " + refreshToken);
         try {
             authService.logout(refreshToken);
-            return ResponseEntity.ok("로그아웃되었습니다.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("로그아웃에 실패했습니다: " + e.getMessage());
+            return new ResponseEntity<>("로그아웃되었습니다.", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("로그아웃실패 : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("로그아웃실패 : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>("로그아웃실패 : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

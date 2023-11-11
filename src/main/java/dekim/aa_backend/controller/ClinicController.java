@@ -47,13 +47,23 @@ public class ClinicController {
           @RequestParam(defaultValue = "0") int page,
           @RequestParam(defaultValue = "10") int pageSize
   ) {
-    Page<Clinic> clinics = clinicService.searchClinicsByKeyword(keyword, PageRequest.of(page, pageSize));
+    try {
+      Page<Clinic> clinics = clinicService.searchClinicsByKeyword(keyword, PageRequest.of(page, pageSize));
 
-    ClinicSearchResponseDTO dto = new ClinicSearchResponseDTO();
-    dto.setClinics(clinics.getContent());
-    dto.setTotalResults(clinics.getTotalElements());
+      ClinicSearchResponseDTO dto = new ClinicSearchResponseDTO();
+      dto.setClinics(clinics.getContent());
+      dto.setTotalResults(clinics.getTotalElements());
+      log.info("👉🏻👉🏻👉🏻", clinics.getContent());
+      log.info("👉🏻👉🏻👉🏻", dto);
+      log.info("👉🏻👉🏻👉🏻", dto.getClinics());
 
-    return ResponseEntity.ok(dto);
+
+
+      return ResponseEntity.ok(dto);
+    } catch (Exception e) {
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
   }
 
 

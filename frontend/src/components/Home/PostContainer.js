@@ -102,7 +102,7 @@ const PostContainer = () => {
               <div
                 className="title"
                 onClick={() => {
-                  if (token) {
+                  if (isLogin) {
                     navigate(`/post/${post.id}`);
                   } else {
                     alert("로그인후에 게시글 열람이 가능합니다.");
@@ -127,7 +127,7 @@ const PostContainer = () => {
               <div
                 className="title"
                 onClick={() => {
-                  if (token) {
+                  if (isLogin) {
                     navigate(`/post/${post.id}`);
                   } else {
                     alert("로그인후에 게시글 열람이 가능합니다.");

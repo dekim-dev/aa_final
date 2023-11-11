@@ -62,20 +62,24 @@ const HomePage = () => {
   console.log("메인 isPaidMember: ", isPaidMember)
   console.log("메인 userNickname: ", userNickname)
 
-  const token = localStorage.getItem("ACCESS_TOKEN");
+    const token = localStorage.getItem("ACCESS_TOKEN");
 
-  useEffect(() => {
-    async function fetchTodaysItems() {
-      try {
-        const response = await getTodoItemsByDate(new Date());
-        setDailyTodoItems(response);
-        console.log("🟢: ", response);
-      } catch (error) {
-        console.log("🔴fetch error: ", error);
+    useEffect(() => {
+      // token이 존재할 때만 실행
+      if (token) {
+        const fetchTodaysItems = async () => {
+          try {
+            const response = await getTodoItemsByDate(new Date());
+            setDailyTodoItems(response);
+            console.log("🟢: ", response);
+          } catch (error) {
+            console.log("🔴fetch error: ", error);
+          }
+        };
+
+        fetchTodaysItems();
       }
-    }
-    fetchTodaysItems();
-  }, []);
+    }, [token]);
 
   return (
     <ParentWrapper>
@@ -84,7 +88,7 @@ const HomePage = () => {
           <DateNotice />
           <Quote />
         </div>
-        {token ? (
+        {isLogin ? (
            <>
               <div className="login_wrapper">
                 <DailyTodoList

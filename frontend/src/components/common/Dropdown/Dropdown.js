@@ -54,7 +54,7 @@ const DropDown = () => {
       try {
         const response = await getUserInfo();
         console.log("👉🏻드롭다운: ", response);
-        if(response === " No user information available") {
+        if(response === "No user information available") {
             setIsLogin(false);
         } else {
             setUserId(response.id);
@@ -82,7 +82,7 @@ const DropDown = () => {
 
   return (
     <DropDownWrapper>
-      {!token || authority === "ROLE_ADMIN" ? (
+      {!isLogin || authority === "ROLE_ADMIN" ? (
         <ProfileIcon
           src={NonMember}
           alt="nonUserImg"

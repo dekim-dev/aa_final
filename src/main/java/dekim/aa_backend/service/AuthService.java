@@ -18,7 +18,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,7 +112,7 @@ public class AuthService {
 
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+                .orElseThrow(() -> new EntityNotFoundException("로그아웃 된 사용자입니다."));
 
         // 4. Refresh Token 일치하는지 검사
         if (!refreshToken.getValue().equals(tokenRequestDTO.getRefreshToken())) {
@@ -126,15 +128,24 @@ public class AuthService {
 
     @Transactional
     public void logout(String refreshToken) {
-
-        int deletedCount = refreshTokenRepository.deleteByValue(refreshToken);
-        log.info("👉🏻refreshToken: " + refreshToken);
-
-        if (deletedCount == 0) {
-            throw new RuntimeException("리프레시 토큰 삭제에 실패했습니다.");
+        // 리프레시 토큰이 null인 경우 예외 발생
+        if (refreshToken == null) {
+            throw new IllegalArgumentException("입력된 리프레시 토큰이 없습니다..");
         }
+        // 리프레시 토큰 조회
+        Optional<RefreshToken> RTK = refreshTokenRepository.findByValue(refreshToken);
+
+        // 리프레시 토큰이 존재하는 경우 삭제
+        if (RTK.isPresent()) {
+            refreshTokenRepository.deleteByValue(refreshToken);
+        } else {
+            // 리프레시 토큰이 존재하지 않는 경우 예외 발생
+            throw new EntityNotFoundException("리프레시 토큰을 찾을 수 없습니다.");
+        }
+        // SecurityContextHolder 초기화
         SecurityContextHolder.clearContext();
     }
+
 
     // 닉네임 중복 확인
     public boolean isNicknameExists(String nickname) {

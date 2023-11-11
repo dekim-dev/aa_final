@@ -70,22 +70,22 @@ const DropdownContent = ({ isLoggedIn, setDropDownView }) => {
     const requestBody = { refreshToken: refreshToken };
 
     if (isLoggedIn) {
-      try {
-        await logout(requestBody);
         localStorage.clear();
+      try {
+        const response = await logout(requestBody);
         alert("로그아웃 되었습니다.");
         setUserPfImg(null);
         setUserId(null);
         setIsLogin(false);
-        window.location.replace("/");
         console.log("✔ 로그아웃 완료");
       } catch (error) {
+        alert("로그아웃 중 오류가 발생했습니다. 새로고침 후 다시 확인해 주세요.")
         console.error("로그아웃 중 오류 발생:", error);
       }
     }
   };
 
-  if (token) {
+  if (isLoggedIn) {
     return (
       <DropdownMenu>
         {authority === "ROLE_USER" ? (
