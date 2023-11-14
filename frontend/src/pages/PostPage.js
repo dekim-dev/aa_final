@@ -15,14 +15,15 @@ const PostPage = () => {
   const [postData, setPostData] = useState({});
   const [canEdit, setCanEdit] = useState(false);
   const [comments, setComments] = useState([]);
+  const token = localStorage.getItem("ACCESS_TOKEN");
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!token) {
       fetchNotice(postId);
     } else {
-      fetchData(); // fetchData 함수 호출
+      fetchData();
     }
-  }, [postId, isLogin]);
+  }, [postId, token]);
 
   const fetchData = async () => {
     try {
@@ -31,7 +32,7 @@ const PostPage = () => {
       console.log("postId: ", postId);
 
       // 그 다음에 게시글 데이터를 가져옴
-      const response = await post(postId);
+      const response = await post(postId, token);
       setPostData(response);
       postStoreRef.current.setPost({ post: response }); // useRef로부터 postStore 참조..
       console.log(postStoreRef.current.post);

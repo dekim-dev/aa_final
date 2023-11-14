@@ -9,14 +9,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor
 @Configuration // 설정파일로 등록
-public class WebSecurityConfig {
+@EnableWebSecurity
+@Component
+public class WebSecurityConfig implements WebMvcConfigurer {
 
   private final TokenProvider tokenProvider;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -32,7 +37,7 @@ public class WebSecurityConfig {
             )
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
-                    .requestMatchers("/auth/**", "/main/**", "/static/**", "/**", "/favicon.ico").permitAll()
+                    .requestMatchers("/auth/**", "/main/**", "/static/**", "/css/**", "/js/**", "/img/**", "/", "/favicon.ico", "/index.html", "/error").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
             )

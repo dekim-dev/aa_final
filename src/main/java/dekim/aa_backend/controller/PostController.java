@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,11 +24,11 @@ public class PostController {
   @Autowired
   private PostService postService;
 
-  @GetMapping("/{postId}")
-  public ResponseEntity<?> retrievePost(@PathVariable Long postId) {
+  @GetMapping(value = "/{postId}")
+  public ResponseEntity<?> retrievePost(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long postId) {
     try {
-      PostResponseDTO post = postService.bringPost(postId);
-      return ResponseEntity.ok().body(post);
+      PostResponseDTO post = postService.bringPost(Long.valueOf(userDetails.getUsername()), postId);
+      return new ResponseEntity<>(post, HttpStatus.OK);
     } catch (Exception e) {
       log.warn("Error retrieving post with ID: " + postId, e);
       return ResponseEntity.notFound().build();

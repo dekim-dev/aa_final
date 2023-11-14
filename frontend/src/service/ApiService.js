@@ -132,20 +132,20 @@ export const logout = async (requestBody) => {
 };
 
 // 프론트엔드에서의 OPTIONS 요청에 대한 처리
-axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (
-      error.response &&
-      error.response.status === 403 &&
-      error.config.method === "options"
-    ) {
-      // OPTIONS 요청에 대한 응답 처리
-      return Promise.resolve(error.response);
-    }
-    return Promise.reject(error);
-  }
-);
+//axios.interceptors.response.use(
+//  (response) => response,
+//  (error) => {
+//    if (
+//      error.response &&
+//      error.response.status === 403 &&
+//      error.config.method === "options"
+//    ) {
+//      // OPTIONS 요청에 대한 응답 처리
+//      return Promise.resolve(error.response);
+//    }
+//    return Promise.reject(error);
+//  }
+//);
 
 // 리프레시 토큰을 사용하여 새로운 액세스 토큰 발급
 export const refreshToken = async () => {
@@ -173,6 +173,7 @@ export const post = async (postId) => {
     const response = await call(`/post/${postId}`, "GET", null, token);
     return response;
   } catch (error) {
+  console.log(error);
     return error;
   }
 };

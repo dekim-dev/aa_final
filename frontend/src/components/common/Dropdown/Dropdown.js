@@ -54,17 +54,13 @@ const DropDown = () => {
       try {
         const response = await getUserInfo();
         console.log("👉🏻드롭다운: ", response);
-        if(response === "No user information available") {
-            setIsLogin(false);
-        } else {
-            setUserId(response.id);
-            setUserPfImg(response.pfImg);
-            setAuthority(response.authority);
-            setIsPaidMember(response.isPaidMember);
-            setUserNickname(response.nickname);
-            setBlockedUsers(response.blockedUserIds);
-            setIsLogin(true)
-        }
+        setUserId(response.id);
+        setUserPfImg(response.pfImg);
+        setAuthority(response.authority);
+        setIsPaidMember(response.isPaidMember);
+        setUserNickname(response.nickname);
+        setBlockedUsers(response.blockedUserIds);
+        setIsLogin(true)
       } catch (error) {
         console.log("드롭다운 에러: ", error);
       }
@@ -78,11 +74,12 @@ const DropDown = () => {
     setIsPaidMember,
     setUserNickname,
     setBlockedUsers,
+    token,
   ]);
 
   return (
     <DropDownWrapper>
-      {!isLogin || authority === "ROLE_ADMIN" ? (
+      {!token || authority === "ROLE_ADMIN" ? (
         <ProfileIcon
           src={NonMember}
           alt="nonUserImg"
@@ -97,7 +94,7 @@ const DropDown = () => {
       )}
       {dropDownView && (
         <DropdownContent
-          isLoggedIn={isLogin}
+          isLoggedIn={token}
           setDropDownView={() => setDropDownView(!dropDownView)}
         />
       )}

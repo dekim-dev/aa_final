@@ -36,16 +36,17 @@ public class PostService {
   private CommentRepository commentRepository;
 
 
-  public PostResponseDTO bringPost(Long postId) {
+  public PostResponseDTO bringPost(Long userId, Long postId) {
+
+    Optional<User> userOptional = userRepository.findById(userId);
+    if (!userOptional.isPresent()) {
+      throw new RuntimeException("User not found");
+    }
+
     Optional<Post> postOptional = postRepository.findById(postId);
 
     if (postOptional.isPresent()) {
       Post post = postOptional.get();
-      Long userNo = post.getUser().getId();
-
-      User user = userRepository.findById(userNo)
-              .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
       return convertToDTO(post);
 
     } else {
