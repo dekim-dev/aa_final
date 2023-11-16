@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import BoardTable from "../components/Board/BoardTable";
 import BoardSearch from "../components/Board/BoardSearch";
@@ -25,15 +25,20 @@ const ParentWrapper = styled.div`
   h2 {
     text-align: center;
   }
-  .search_bar {
-    margin: 0 auto;
-    width: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .search_bar,
+  .button_wrapper {
+    width: 90%;
+    text-align: right;
   }
   .pagination {
     align-self: center;
+  }
+  @media screen and (max-width: 768px) {
+    .search_bar,
+    .button_wrapper {
+      width: 94%;
+      text-align: right;
+    }
   }
 `;
 
@@ -72,19 +77,6 @@ const BoardPage = ({ boardName }) => {
     }
   };
 
-  useEffect(() => {
-    if (boardName === "best") {
-      getPopularPostsList(); // 베스트 게시판인 경우 베스트 게시글을 가져옴
-    } else if (searchResults) {
-      setPostList(searchResults.content);
-      setTotalResults(searchResults.totalElements);
-    } else if (boardName === "notice") {
-      getNoticeList();
-    } else {
-      getPostListByBoardCategory();
-    }
-  }, [boardName, currentPage, searchResults]);
-
   const getPopularPostsList = async () => {
     try {
       const response = await getPopularPosts();
@@ -112,7 +104,7 @@ const BoardPage = ({ boardName }) => {
     setCurrentPage(1);
   }, [boardName]);
 
-  const getPostListByBoardCategory = async () => {
+  const getPostListByBoardCategory = useCallback(async () => {
     try {
       const response = await getPostsByBoardCategory(
         currentPage - 1,
@@ -124,7 +116,21 @@ const BoardPage = ({ boardName }) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [currentPage, pageSize, boardName]);
+
+  useEffect(() => {
+    if (boardName === "best") {
+      getPopularPostsList();
+    } else if (searchResults) {
+      setPostList(searchResults.content);
+      setTotalResults(searchResults.totalElements);
+    } else if (boardName === "notice") {
+      getNoticeList();
+    } else {
+      getPostListByBoardCategory();
+    }
+  }, [boardName, currentPage, searchResults, getPostListByBoardCategory]);
+
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= Math.ceil(totalResults / pageSize)) {
@@ -136,10 +142,6 @@ const BoardPage = ({ boardName }) => {
     <ParentWrapper>
       <h2> {koreanBoardName}</h2>
       <div className="search_bar">
-        <div className="select_box">
-          {boardName === "free" && <FreeBoardTopics />}
-          {boardName === "qna" && <QnABoardTopics />}
-        </div>
         <BoardSearch
           boardName={boardName}
           onSearch={handleSearch}
@@ -153,7 +155,9 @@ const BoardPage = ({ boardName }) => {
         totalPages={Math.ceil(totalResults / pageSize)}
         onPageChange={handlePageChange}
       />
-      {boardName !== "notice" && boardName !== "best" && <WriteButton />}
+      <div className="button_wrapper">
+        {boardName !== "notice" && boardName !== "best" && <WriteButton />}
+      </div>
     </ParentWrapper>
   );
 };

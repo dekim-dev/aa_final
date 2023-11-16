@@ -3,6 +3,7 @@ import { Logo } from "../components/common/Logo";
 import styled from "styled-components";
 
 const ParentWrapper = styled.div`
+  width: 80%;
   margin: 2rem auto;
   display: flex;
   flex-direction: column;

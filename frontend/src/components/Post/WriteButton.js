@@ -1,12 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const ParentWrapper = styled.div`
-  width: 80%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: flex-end;
-`;
+const ParentWrapper = styled.div``;
 
 const WriteButton = () => {
   const navigate = useNavigate();

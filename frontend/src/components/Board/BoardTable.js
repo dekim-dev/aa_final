@@ -66,68 +66,64 @@ const WebBoardTable = ({
   }
 
   return (
-    <>
-      <div>
-        <StyledTable>
-          <thead>
-            <tr>
-              <th></th>
-              <th>제목</th>
-              <th>글쓴이</th>
-              <th>작성일</th>
-              <th>조회수</th>
-              <th>좋아요</th>
-            </tr>
-          </thead>
-          <tbody>
-            {postList.map((post) => (
-              <tr key={post.id}>
-                {blockedUsers && blockedUsers.includes(post.userId.toString()) ? (
-                  <>
-                    {/* 차단한 회원일 경우 */}
-                    <td></td>
-                    <td>
-                      <p style={{ color: "gray", textAlign: "left" }}>
-                        차단한 회원이 작성한 글입니다.
-                      </p>
-                    </td>
-                    <td>
-                      <BlockedUser userId={post.userId} />
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </>
-                ) : (
-                  <>
-                    {/* 차단하지 않은 회원일 경우 */}
-                    <td>
-                      {showCheckbox && (
-                        <input
-                          type="checkbox"
-                          checked={selectedPostIds.includes(post.id)}
-                          onChange={() => onCheckboxChange(post.id)}
-                        />
-                      )}
-                    </td>
-                    <td className="title">
-                      {topics[post.topic]
-                        ? `[${topics[post.topic]}]  `
-                        : `[공지]  `}
-                      <Link to={`/post/${post.id}`}>{post.title}</Link>
-                    </td>
-                    <td className="nickname">{post.nickname}</td>
-                    <td className="createdAt">{dateFormat(post.createdAt)}</td>
-                    <td className="viewCount">{post.viewCount}</td>
-                    <td className="likes">{post.likesCount}</td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </StyledTable>
-      </div>
-    </>
+    <StyledTable>
+      <thead>
+        <tr>
+          <th></th>
+          <th>제목</th>
+          <th>글쓴이</th>
+          <th>작성일</th>
+          <th>조회수</th>
+          <th>좋아요</th>
+        </tr>
+      </thead>
+      <tbody>
+        {postList.map((post) => (
+          <tr key={post.id}>
+            {blockedUsers && blockedUsers.includes(post.userId.toString()) ? (
+              <>
+                {/* 차단한 회원일 경우 */}
+                <td></td>
+                <td>
+                  <p style={{ color: "gray", textAlign: "left" }}>
+                    차단한 회원이 작성한 글입니다.
+                  </p>
+                </td>
+                <td>
+                  <BlockedUser userId={post.userId} />
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </>
+            ) : (
+              <>
+                {/* 차단하지 않은 회원일 경우 */}
+                <td>
+                  {showCheckbox && (
+                    <input
+                      type="checkbox"
+                      checked={selectedPostIds.includes(post.id)}
+                      onChange={() => onCheckboxChange(post.id)}
+                    />
+                  )}
+                </td>
+                <td className="title">
+                  {topics[post.topic]
+                    ? `[${topics[post.topic]}]  `
+                    : `[공지]  `}
+                  <Link to={`/post/${post.id}`}>{post.title}</Link>
+                </td>
+                <td className="nickname">{post.nickname}</td>
+                <td className="createdAt">{dateFormat(post.createdAt)}</td>
+                <td className="viewCount">{post.viewCount}</td>
+                <td className="likes">{post.likesCount}</td>
+              </>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </StyledTable>
   );
 };
 
