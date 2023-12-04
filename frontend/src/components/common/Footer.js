@@ -47,7 +47,9 @@ const Footer = () => {
         <li>
           <Link to={"/user-policy"}>개인정보처리방침</Link>
         </li>
-        <li>고객센터</li>
+        <li>
+          <Link to={"/user-inquiry"}>고객센터</Link>
+        </li>
       </ul>
     </ParentWrapper>
   );
