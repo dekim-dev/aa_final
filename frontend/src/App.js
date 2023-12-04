@@ -20,6 +20,9 @@ import KakaoCallback from "./components/KakaoPay/KakaoCallBack";
 import FindPwdPage from "./pages/FindPwdPage";
 import UserRoute from "./utils/UserRoute";
 import AdminRoute from "./utils/AdminRoute";
+import UserAgreements from "./components/common/UserAgreements";
+import UserPolicy from "./components/common/UserPolicy";
+import Footer from "./components/common/Footer";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -63,8 +66,11 @@ function App() {
           <Route path="/membership/*" element={<UserRoute><MembershipPage /></UserRoute>} />
           <Route path="/kakao/auth/callback" element={<KakaoCallback />} />
           <Route path="/admin/*" element={<AdminRoute><AdminPage /></AdminRoute>} />
+          <Route path="/user-agreements" element={<UserAgreements />} />
+          <Route path="/user-policy" element={<UserPolicy />} />
         </Routes>
         <Ad />
+        <Footer />
       </Router>
     </UserStore>
   );
