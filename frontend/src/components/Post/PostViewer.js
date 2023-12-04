@@ -29,6 +29,8 @@ const ParentWrapper = styled.div`
   }
   .title {
     font-size: 1.4rem;
+    display: flex;
+    align-items: center;
   }
   .post_info_container {
     margin-top: -0.8rem;
@@ -154,13 +156,15 @@ const PostViewer = ({ postData, canEdit, postId, isLogin }) => {
           <div className="board_topic_container row">
             <p>{koreanBoardNames[postData.boardCategory]}</p>
           </div>
-          <div className="title">
-            <p>
-              {topics[postData.topic]
-                ? `[${topics[postData.topic]}] ${postData.title}`
-                : `[공지] ${postData.title}`}
-            </p>
-          </div>
+          <p className="title">
+            {topics[postData.topic]
+              ? `[${topics[postData.topic]}] ${postData.title}`
+              : `[공지] ${postData.title}`}
+            {"  "}
+            <span style={{ fontSize: "0.9rem" }}>
+              [{postData.commentsCount}]
+            </span>
+          </p>
           {isMobile ? (
             <MobileInfoWrapper>
               <UserPfImgBar userPfImg={postData.pfImg} />

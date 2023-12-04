@@ -15,6 +15,21 @@ import { dateFormatWithTime } from "../../../utils/Functions";
 import useWindowResize from "../../../utils/useWindowResize";
 import { UserContext } from "../../../context/UserContext";
 
+const ParentContainer = styled.div`
+  .commentsCount_wrapper {
+    margin: 1rem auto;
+    width: 80%;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: -0.8rem;
+  }
+  @media screen and (max-width: 768px) {
+    .commentsCount_wrapper {
+      font-size: 0.8rem;
+    }
+  }
+`;
+
 const ParentWrapper = styled.div`
   margin: 1rem auto;
   width: 80%;
@@ -197,7 +212,10 @@ const CommentViewer = ({
   };
 
   return (
-    <>
+    <ParentContainer>
+      <div className="commentsCount_wrapper">
+        댓글 수 : {commentData && commentData.length}
+      </div>
       {isMobile ? (
         <MobileWrapper>
           {commentData &&
@@ -355,7 +373,7 @@ const CommentViewer = ({
             })}
         </ParentWrapper>
       )}
-    </>
+    </ParentContainer>
   );
 };
 export default CommentViewer;
