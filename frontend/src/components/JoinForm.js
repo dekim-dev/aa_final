@@ -4,6 +4,7 @@ import InputField from "./common/TextField";
 import Button from "./common/Button";
 import { dupEmail, dupNickname, signup } from "../service/ApiService";
 import { useNavigate } from "react-router-dom";
+import JoinAgreements from "./JoinAgreements";
 
 const ParentWrapper = styled.div`
   width: 30%;
@@ -30,6 +31,8 @@ const JoinForm = () => {
 
   const [isConPwdValid, setIsConPwdValid] = useState(false);
   const [conPwdHelperText, setConPwdHelperText] = useState("");
+
+  const [isAgreementsChecked, setIsAgreementsChecked] = useState(false);
 
   const [state, setState] = useState({
     email: "",
@@ -124,6 +127,10 @@ const JoinForm = () => {
   };
 
   const handleJoin = () => {
+    if (!isAgreementsChecked) {
+      alert("필수 약관에 동의해 주세요.");
+      return;
+    }
     if (isEmailValid && isNicknameValid && isPwdValid && isConPwdValid) {
       console.log(isEmailValid, isNicknameValid, isPwdValid, isConPwdValid);
       const requestData = {
@@ -155,6 +162,12 @@ const JoinForm = () => {
       }
       alert(errorMessage);
     }
+  };
+
+  const handleAgreementChange = (checkedItems) => {
+    setIsAgreementsChecked(
+      checkedItems.includes("chk1") && checkedItems.includes("chk2")
+    );
   };
 
   return (
@@ -203,6 +216,7 @@ const JoinForm = () => {
         width="100%"
         isValid={isConPwdValid}
       />
+      <JoinAgreements onAgreementChange={handleAgreementChange} />
       <Button
         width="70%"
         height="2rem"
