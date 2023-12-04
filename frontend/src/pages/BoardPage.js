@@ -18,6 +18,7 @@ import { useLocation } from "react-router-dom";
 import Pagination from "../components/common/Pagination";
 
 const ParentWrapper = styled.div`
+  height: 75vh;
   width: 100%;
   display: flex;
   flex-direction: column;

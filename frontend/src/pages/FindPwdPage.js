@@ -5,14 +5,16 @@ import styled from "styled-components";
 import { issueTempPwd } from "../service/ApiService";
 
 const ParentWrapper = styled.div`
-  margin: 0 auto;
+  margin: 4rem auto;
   width: 30%;
+  height: 60vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.2rem;
   @media screen and (max-width: 768px) {
     width: 90%;
+    height: none;
   }
 `;
 

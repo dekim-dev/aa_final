@@ -8,7 +8,7 @@ const ParentWrapper = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #ececec;
+//  background-color: #ececec;
   margin-top: 2rem;
   padding: 1rem;
   display: flex;
