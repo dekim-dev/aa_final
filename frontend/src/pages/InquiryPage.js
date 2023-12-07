@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import styled from "styled-components";
 import { UserContext } from "../context/UserContext";
 import { sendInquiry } from "../service/ApiService";
+import { useNavigate } from "react-router-dom";
 
 const ParentWrapper = styled.div`
   width: 70%;
@@ -52,6 +53,7 @@ const NonMemberContainer = styled.div`
 `;
 
 const InquiryPage = () => {
+  const navigate = useNavigate();
   const { userNickname } = useContext(UserContext);
 
   const [state, setState] = useState({
@@ -85,6 +87,7 @@ const InquiryPage = () => {
       const response = await sendInquiry(inquiryRequest);
       console.log(response);
       alert("문의가 접수되었습니다.");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
