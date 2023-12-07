@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   getClinicList,
+  getClinicListByAddress,
   getClinicListByKeyword,
 } from "../../service/ApiService";
 import { useLocation } from "react-router-dom";
@@ -22,7 +23,7 @@ const ParentWrapper = styled.div`
     align-self: center;
   }
   .search {
-    align-self: flex-end;
+    align-self: center;
   }
 `;
 
@@ -31,6 +32,7 @@ const ClinicTable = ({ isMobile }) => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState();
+  const [searchAddress, setSearchAddress] = useState("");
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -46,15 +48,24 @@ const ClinicTable = ({ isMobile }) => {
           page - 1, // 사용자에게 보이는 페이지 번호에서 1을 뺀 값 (인덱스 값)
           pageSize
         );
+      } else if (searchAddress) {
+        response = await getClinicListByAddress(
+          searchAddress,
+          page - 1,
+          pageSize
+        );
       } else {
         response = await getClinicList(page - 1, pageSize);
       }
 
       if (response) {
-        const clinicData = searchKeyword ? response.clinics : response.content;
+        const clinicData =
+          searchKeyword || searchAddress ? response.clinics : response.content;
         setClinicList(clinicData);
         setTotalResults(
-          searchKeyword ? response.totalResults : response.totalElements
+          searchKeyword || searchAddress
+            ? response.totalResults
+            : response.totalElements
         );
         console.log(response);
       }
@@ -71,6 +82,8 @@ const ClinicTable = ({ isMobile }) => {
 
   const handleSearch = () => {
     setCurrentPage(1); // 검색 시 페이지를 1로 초기화
+    setSearchKeyword("");
+    setSearchAddress("");
   };
 
   const handlePageChange = (newPage) => {
@@ -86,6 +99,8 @@ const ClinicTable = ({ isMobile }) => {
         className="search"
         searchKeyword={searchKeyword}
         setSearchKeyword={setSearchKeyword}
+        searchAddress={searchAddress}
+        setSearchAddress={setSearchAddress}
         handleSearch={handleSearch}
         fetchData={fetchData}
       />

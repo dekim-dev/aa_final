@@ -31,9 +31,20 @@ const ParentWrapper = styled.div`
     width: 70%;
     margin: 0 auto;
     display: flex;
+    border: 1px solid #ececec;
+    padding: 0.4rem;
   }
   .recommend_btn {
     margin-left: auto;
+  }
+  @media screen and (max-width: 768px) {
+    section,
+    .recommend_wrapper {
+      width: 84%;
+    }
+    .comment_wrapper {
+      width: 100%;
+    }
   }
 `;
 
@@ -111,8 +122,9 @@ const ClinicDetailPage = () => {
         <KakaoMap {...kakaoMapInfo} />
       </section>
       <div className="recommend_wrapper">
+        ✨병원 추천 수 : {clinicInfo.recommendCount}
         <button className="recommend_btn" onClick={handleClickRecommend}>
-          👍🏻
+          🏥추천/취소
         </button>
       </div>
       <div className="comment_wrapper">

@@ -23,6 +23,8 @@ const MobileWrapper = styled.div`
     .clinic_name {
       font-size: 1rem;
       font-weight: bold;
+      display: flex;
+      align-items: center;
     }
     .clinic_addr {
       overflow: hidden;
@@ -30,27 +32,45 @@ const MobileWrapper = styled.div`
       white-space: nowrap;
       font-size: 0.9rem;
     }
+    .commentsCount_wrapper {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
   }
 `;
 
 const MobileClinicTable = ({ clinicList }) => {
   return (
-    <>
-      <MobileWrapper>
-        <div className="col">
-          {clinicList.map((clinic) => (
-            <Link
-              className="map_container"
-              to={`/clinic/${clinic.id}`}
-              key={clinic.id}
-            >
-              <p className="clinic_name">{clinic.name}</p>
-              <p className="clinic_addr">{clinic.address}</p>
-            </Link>
-          ))}
-        </div>
-      </MobileWrapper>
-    </>
+    <MobileWrapper>
+      <p
+        style={{
+          fontSize: "0.8rem",
+          fontWeight: "600",
+          marginBottom: "0.2rem",
+        }}
+      >
+        회원 추천이 있는 병원에는 '✨'이모티콘이 표시됩니다.
+      </p>
+      <div className="col">
+        {clinicList.map((clinic) => (
+          <Link
+            className="map_container"
+            to={`/clinic/${clinic.id}`}
+            key={clinic.id}
+          >
+            <p className="clinic_name">
+              {clinic.recommendCount >= 1 && "✨"}
+              {clinic.name}
+              {"\u00A0\u00A0"}
+              <span className="commentsCount_wrapper">
+                [{clinic.commentDTOs.length}]
+              </span>
+            </p>
+            <p className="clinic_addr">{clinic.address}</p>
+          </Link>
+        ))}
+      </div>
+    </MobileWrapper>
   );
 };
 
